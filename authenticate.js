@@ -4,7 +4,6 @@ var User = require('./models/user');
 var JwtStrategy = require('passport-jwt').Strategy;
 var ExtractJwt = require('passport-jwt').ExtractJwt;
 var jwt = require('jsonwebtoken');
-
 var config = require('./config');
 
 exports.local = passport.use(new LocalStrategy(User.authenticate()));
@@ -36,3 +35,13 @@ exports.jwtPassport = passport.use(new JwtStrategy(opts, function(jwt_payload, d
 
 
 exports.verifyUser = passport.authenticate('jwt', { session: false });
+exports.adminUser = function(username){
+ return User.find({"username": username})
+  .then((user) => {
+    if(user.admin)
+      return true
+    else
+      return false
+  })
+  .catch((err) => console.log(err));
+}

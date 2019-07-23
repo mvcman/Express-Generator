@@ -31,9 +31,7 @@ const promoSchema = new Schema({
     type: Boolean,
     default: false
   }
-},{
-  timestamp: true
 });
-
+promoSchema.set('timestamp', true);
 var Promotions = mongoose.model('Promotions', promoSchema);
 module.exports = Promotions;

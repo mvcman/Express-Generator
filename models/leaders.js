@@ -28,9 +28,7 @@ const leaderSchema = new Schema({
     type: Boolean,
     default: false
   }
-},{
-  timestamp: true
 });
-
+leaderSchema.set('timestamp', true);
 var Leader = mongoose.model('Leader', leaderSchema);
 module.exports = Leader;
