@@ -35,13 +35,20 @@ exports.jwtPassport = passport.use(new JwtStrategy(opts, function(jwt_payload, d
 
 
 exports.verifyUser = passport.authenticate('jwt', { session: false });
-exports.adminUser = function(username){
- return User.find({"username": username})
-  .then((user) => {
-    if(user.admin)
-      return true
-    else
-      return false
-  })
-  .catch((err) => console.log(err));
-}
+
+exports.jwtPassport = passport.use(new JwtStrategy(opts, function(jwt_payload, done){
+  console.log("JWT Payload: ", jwt_payload);
+  User.findOne({ _id: jwt_payload._id }, (err, user) => {
+    if(err){
+      return done(err, false);
+    }
+    else if(user.admin){
+      return done(null, user);
+    }
+    else {
+      return done(null, false);
+    }
+  });
+}))
+
+exports.adminUser = passport.authenticate('jwt', { session: false });

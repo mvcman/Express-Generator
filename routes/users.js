@@ -7,22 +7,22 @@ var authenticate = require('../authenticate');
 router.use(bodyParser.json());
 
 /* GET users listing. */
-router.get('/', (req, res, next) => {
-    if(authenticate.adminUser(req.user.username)){
-      User.find({})
-      .then((users) => {
-        res.statusCode = 200;
-        res.setHeader('Content-Type', 'application/json');
-        res.json(users);
-      })
-      .catch((err) => next());
-    }else {
-      err = new Error('User Not allowed!');
-      err.status = 404;
-      return next(err);
-    }
+router.get('/', authenticate.adminUser, (req, res, next) => {
+  // console.log(req.body.username);
+  //   User.find({"username": req.body.username})
+  //   .then((user) => {
+  //     if(user[0].admin){
+        User.find({}).then((users) => {
+          res.statusCode = 200;
+          res.setHeader('Content-Type', 'application/json');
+          res.json(users);
+    //     }).catch((err) => console.log(err));
+    //    }else {
+    //       err = new Error('User Not allowed!');
+    //       err.status = 404;
+    //       return next(err);
+    }).catch((err) => console.log(err));
 });
-
 // router.post('/signup', (req, res, next) => {
 //   User.register(new User({username: req.body.username}), req.body.password, (err, user) => {
 //     if(user != null) {
